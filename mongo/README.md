@@ -3,7 +3,7 @@
 This subdirectory enables creating a MongoDB replica set via a Docker swarm
 cluster.
 
-1. (Prerequisite) git clone this project to target machines
+1. (Prerequisite) git clone this project to target machines and cd into the mongo directory
 
 2. First create a Docker swarm. Run `setupWorker.sh` on the first node to make it
 the cluster's first manager node:
@@ -42,7 +42,9 @@ do the following:
     ```
     
 7. Be sure to set the root user password inside of `mongod.env`
-(This file can be deleted once the service starts on the swarm)
+(This file can be deleted once the service starts on the swarm):
+
+    `nano mongodb.env`
     
 8. Next ensure the details within `docker-compose.yml` are accurate. (Paths to attached
  volumes and such) Then deploy the replica set by running:

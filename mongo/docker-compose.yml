@@ -1,5 +1,8 @@
 version: "3.0"
 
+volumes:
+  mongo-keys:
+
 networks:
   default:
     external:
