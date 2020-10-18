@@ -32,7 +32,7 @@ services:
     env_file:
       ./mongod.env
     ports:
-      - 27017:27017
+      - 27018:27017
     command: 'mongod --auth --keyFile /opt/keyfile/mongo-conf/mongodb-keyfile --replSet rs0'
     deploy:
       placement:
@@ -47,7 +47,7 @@ services:
     env_file:
       ./mongod.env
     ports:
-      - 27017:27017
+      - 27019:27017
     command: 'mongod --auth --keyFile /opt/keyfile/mongo-conf/mongodb-keyfile --replSet rs0'
     deploy:
       placement:
