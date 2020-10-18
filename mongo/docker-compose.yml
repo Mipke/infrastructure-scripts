@@ -9,6 +9,12 @@ networks:
       name: mongo
 
 services:
+  mongo-keys-service:
+    image: depop/openssl-bats
+    volumes:
+      - mongo-keys:/mongo-conf
+    command: 'bash -c "openssl rand -base64 741 > /mongo-conf/mongodb-keyfile; chmod 600 /mongo-conf/mongodb-keyfile; chown 999 /mongo-conf/mongodb-keyfile"'
+
   mongo1:
     image: mongo:4.4.1
     volumes:
@@ -19,6 +25,8 @@ services:
     ports:
       - 27017:27017
     command: 'mongod --auth --keyFile /opt/keyfile/mongodb-keyfile --replSet rs0'
+    depends_on:
+      - mongo-keys-service
     deploy:
       placement:
         constraints:
@@ -34,6 +42,8 @@ services:
     ports:
       - 27018:27017
     command: 'mongod --auth --keyFile /opt/keyfile/mongodb-keyfile --replSet rs0'
+    depends_on:
+      - mongo-keys-service
     deploy:
       placement:
         constraints:
@@ -49,6 +59,8 @@ services:
     ports:
       - 27019:27017
     command: 'mongod --auth --keyFile /opt/keyfile/mongodb-keyfile --replSet rs0'
+    depends_on:
+      - mongo-keys-service
     deploy:
       placement:
         constraints:
