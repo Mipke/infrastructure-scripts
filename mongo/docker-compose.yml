@@ -18,7 +18,7 @@ services:
       ./mongod.env
     ports:
       - 27017:27017
-    command: 'mongod --auth --keyFile /opt/keyfile/mongo-conf/mongodb-keyfile --replSet rs0'
+    command: 'mongod --auth --keyFile /opt/keyfile/mongodb-keyfile --replSet rs0'
     deploy:
       placement:
         constraints:
@@ -33,7 +33,7 @@ services:
       ./mongod.env
     ports:
       - 27018:27017
-    command: 'mongod --auth --keyFile /opt/keyfile/mongo-conf/mongodb-keyfile --replSet rs0'
+    command: 'mongod --auth --keyFile /opt/keyfile/mongodb-keyfile --replSet rs0'
     deploy:
       placement:
         constraints:
@@ -48,7 +48,7 @@ services:
       ./mongod.env
     ports:
       - 27019:27017
-    command: 'mongod --auth --keyFile /opt/keyfile/mongo-conf/mongodb-keyfile --replSet rs0'
+    command: 'mongod --auth --keyFile /opt/keyfile/mongodb-keyfile --replSet rs0'
     deploy:
       placement:
         constraints:
