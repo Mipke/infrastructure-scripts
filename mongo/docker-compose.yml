@@ -2,6 +2,8 @@ version: "3.0"
 
 volumes:
   mongo-keys:
+  mongodata2:
+  mongodata3:
 
 networks:
   default:
@@ -36,7 +38,7 @@ services:
     image: mongo:4.4.1
     volumes:
       - mongo-keys:/opt/keyfile
-      - /mongo/data:/data/db
+      - mongodata2:/data/db
     env_file:
       ./mongod.env
     ports:
@@ -53,7 +55,7 @@ services:
     image: mongo:4.4.1
     volumes:
       - mongo-keys:/opt/keyfile
-      - /mongo/data:/data/db
+      - mongodata3:/data/db
     env_file:
       ./mongod.env
     ports:
