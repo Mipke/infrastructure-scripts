@@ -1,0 +1,52 @@
+version: "3.0"
+
+networks:
+  default:
+    external:
+      name: mongo
+
+services:
+  mongo1:
+    image: mongo:4.4.1
+    volumes:
+      - mongo-keys:/opt/keyfile
+      - /mnt/volume_nyc3_01:/data/db
+    env_file:
+      ./mongod.env
+    ports:
+      - 27017:27017
+    command: 'mongod --auth --keyFile /opt/keyfile/mongo-conf/mongodb-keyfile --replSet rs0'
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.mongo.replica == 1"
+
+  mongo2:
+    image: mongo:4.4.1
+    volumes:
+      - mongo-keys:/opt/keyfile
+      - /mongo/data:/data/db
+    env_file:
+      ./mongod.env
+    ports:
+      - 27017:27017
+    command: 'mongod --auth --keyFile /opt/keyfile/mongo-conf/mongodb-keyfile --replSet rs0'
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.mongo.replica == 2"
+
+  mongo3:
+    image: mongo:4.4.1
+    volumes:
+      - mongo-keys:/opt/keyfile
+      - /mongo/data:/data/db
+    env_file:
+      ./mongod.env
+    ports:
+      - 27017:27017
+    command: 'mongod --auth --keyFile /opt/keyfile/mongo-conf/mongodb-keyfile --replSet rs0'
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.mongo.replica == 3"
