@@ -3,7 +3,6 @@ version: "3.0"
 volumes:
   mongo-keys:
     external: true
-    name: mongo-keys
   mongodata2:
   mongodata3:
 
