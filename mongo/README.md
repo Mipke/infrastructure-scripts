@@ -30,23 +30,22 @@ of the corresponding node found in the output of `docker node ls`:
 
     `docker network create --driver overlay --internal mongo`
     
-6. Next create a key to encrypt communication between the replicas. To do this, create
-a new volume to hold the keys and then generate the key. Again from inside the manager
-do the following:
+6. Next create a key to encrypt communication between the replicas. To do this, create a new volume to 
+hold the keys and then generate the key. Again from inside the manager do the following:
 
     ```
    docker volume create --name mongo-keys
    docker run --mount type=volume,source=mongo-keys,target=/mongo-conf  \
-        depop/openssl-bats \
-        bash -c "openssl rand -base64 741 > /mongo-conf/mongodb-keyfile; chmod 600 /mongo-conf/mongodb-keyfile; chown 999 /mongo-conf/mongodb-keyfile"
-    ```
+       depop/openssl-bats \
+       bash -c "openssl rand -base64 741 > /mongo-conf/mongodb-keyfile; chmod 600 /mongo-conf/mongodb-keyfile; chown 999 /mongo-conf/mongodb-keyfile"
+   ```
     
-7. Be sure to set the root user password inside of `mongod.env`
+6. Be sure to set the root user password inside of `mongod.env`
 (This file can be deleted once the service starts on the swarm):
 
     `nano mongodb.env`
     
-8. Next ensure the details within `docker-compose.yml` are accurate. (Paths to attached
+7. Next ensure the details within `docker-compose.yml` are accurate. (Paths to attached
  volumes and such) Then deploy the replica set by running:
 
     `docker stack deploy --compose-file docker-compose.yml <NAME OF STACK>`
@@ -57,3 +56,4 @@ do the following:
 - https://www.digitalocean.com/community/tutorials/how-to-create-a-cluster-of-docker-containers-with-docker-swarm-and-digitalocean-on-ubuntu-16-04
 - https://medium.com/@kalahari/running-a-mongodb-replica-set-on-docker-1-12-swarm-mode-step-by-step-a5f3ba07d06e
 - https://docs.docker.com/engine/swarm/stack-deploy/
+- https://github.com/willitscale/learning-docker/tree/master/tutorial-12
