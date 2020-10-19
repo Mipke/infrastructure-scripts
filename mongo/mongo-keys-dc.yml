@@ -1,0 +1,11 @@
+version: "3.0"
+
+volumes:
+  mongo-keys:
+
+services:
+  mongo-keys-service:
+    image: depop/openssl-bats
+    volumes:
+      - mongo-keys:/mongo-conf
+    command: 'bash -c "openssl rand -base64 741 > /mongo-conf/mongodb-keyfile; chmod 600 /mongo-conf/mongodb-keyfile; chown 999 /mongo-conf/mongodb-keyfile"'

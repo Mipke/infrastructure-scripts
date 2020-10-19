@@ -30,25 +30,20 @@ of the corresponding node found in the output of `docker node ls`:
 
     `docker network create --driver overlay --internal mongo`
     
-6. Next create a key to encrypt communication between the replicas. To do this, create a new volume to 
-hold the keys and then generate the key. Again from inside the manager do the following:
-
-    ```
-   docker volume create --name mongo-keys
-   docker run --mount type=volume,source=mongo-keys,target=/mongo-conf  \
-       depop/openssl-bats \
-       bash -c "openssl rand -base64 741 > /mongo-conf/mongodb-keyfile; chmod 600 /mongo-conf/mongodb-keyfile; chown 999 /mongo-conf/mongodb-keyfile"
-   ```
-    
 6. Be sure to set the root user password inside of `mongod.env`
 (This file can be deleted once the service starts on the swarm):
 
     `nano mongodb.env`
     
-7. Next ensure the details within `docker-compose.yml` are accurate. (Paths to attached
+7. Next create a key to encrypt communication between the replicas. To do this, deploy a stack
+whose only purpose is to maintain the authentication key used to authentication replicas:
+
+    `docker stack deploy --compose-file mongo-keys-dc.yml mongo-keys-stack`
+    
+8. Next ensure the details within `docker-compose.yml` are accurate. (Paths to attached
  volumes and such) Then deploy the replica set by running:
 
-    `docker stack deploy --compose-file docker-compose.yml <NAME OF STACK>`
+    `docker stack deploy --compose-file docker-compose.yml mongo-stack`
 
 #### Resources
 - https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/
