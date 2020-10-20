@@ -35,10 +35,17 @@ of the corresponding node found in the output of `docker node ls`:
 
     `nano mongodb.env`
     
-7. Next create a key to encrypt communication between the replicas. To do this, deploy a stack
-whose only purpose is to maintain the authentication key used to authentication replicas:
+7. Next create a key to encrypt communication between the replicas. To do this, create the key, bind it
+to the swarm as a secret, then delete the source file with the following:
 
-    `docker stack deploy --compose-file mongo-keys-dc.yml mongo-keys-stack`
+    ```
+   cd ~ && mkdir mongo-conf
+   docker run --name openssl-bats -v ~/mongo-conf:/mongo-conf depop/openssl-bats \ 
+        bash -c "openssl rand -base64 741 > /mongo-conf/mongodb-keyfile; chmod 600 /mongo-conf/mongodb-keyfile; chown 999 /mongo-conf/mongodb-keyfile"
+   docker secret create mongo_key ~/mongodb-keyfile
+   docker rm openssl-bats
+   rm -r ~/mongo-conf
+   ```
     
 8. Next ensure the details within `docker-compose.yml` are accurate. (Paths to attached
  volumes and such) Then deploy the replica set by running:
