@@ -35,22 +35,68 @@ of the corresponding node found in the output of `docker node ls`:
 
     `nano mongodb.env`
     
-7. Next create a key to encrypt communication between the replicas. To do this, create the key, bind it
-to the swarm as a secret, then delete the source file with the following:
+7. Next it is necessary to create a key to encrypt communication between the replicas and to put this key on each 
+of the nodes in the swarm:
 
     ```
    cd ~ && mkdir mongo-conf
-   docker run --name openssl-bats -v ~/mongo-conf:/mongo-conf depop/openssl-bats \ 
-        bash -c "openssl rand -base64 741 > /mongo-conf/mongodb-keyfile; chmod 600 /mongo-conf/mongodb-keyfile; chown 999 /mongo-conf/mongodb-keyfile"
-   docker secret create mongo_key ~/mongodb-keyfile
-   docker rm openssl-bats
-   rm -r ~/mongo-conf
+   nano mongo_replica_keys.yml
    ```
+   
+   Make the contents of mongo_replica_keys.yml:
+   
+   ```
+   - <SOME RANDOM REALLY LONG STRING>
+   ```
+   
+   Set permissions on the new file (mongo is very particular):
+   
+   ```
+   chmod 600 mongo_replica_keys.yml
+   chown 999 mongo_replica_keys.yml
+   ```
+   
+   Create the same directory and file on each of the other nodes. Copy/paste the contents of the first node's 
+   file contents so that all nodes have the same set of keys. Be sure to also permission each node's file.
     
 8. Next ensure the details within `docker-compose.yml` are accurate. (Paths to attached
  volumes and such) Then deploy the replica set by running:
 
     `docker stack deploy --compose-file docker-compose.yml mongo-stack`
+    
+9. Initiate the replica set from a mongo shell:
+
+    ```
+   mongosh "mongodb://<ROOT USER>:<ROOT PASSWORD>@<MONGO1 HOST>:27017/?replSet=rs0"
+   rs.initiate(
+       {
+          "_id":"rs0",
+          "members":[
+             {
+                "_id":0,
+                "host":"mongo1:27017"
+             },
+             {
+                "_id":1,
+                "host":"mongo2:27017"
+             },
+             {
+                "_id":2,
+                "host":"mongo3:27017"
+             }
+          ]
+       }
+   );
+   ```
+
+10. Prioritize the first node to have priority as the primary mongo node (from the same mongo shell as the last
+step):
+
+    ```
+    conf = rs.config();
+    conf.members[0].priority = 2;
+    rs.reconfig(conf);
+    ```
 
 #### Resources
 - https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/
