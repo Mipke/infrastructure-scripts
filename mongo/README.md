@@ -97,6 +97,20 @@ step):
     conf.members[0].priority = 2;
     rs.reconfig(conf);
     ```
+    
+11. In the mongo shell, now create an additional user to act as the cluster admin:
+
+    ```
+    use admin;
+    db.createUser({user: "cluster_admin",pwd: "password",roles: [ { role: "userAdminAnyDatabase", db: "admin" },  { "role" : "clusterAdmin", "db" : "admin" } ]});
+    ```
+    
+12. In the mongo shell, authenticate as the new cluster admin and create a user for the desired app database:
+
+    ```
+    use my_data;
+    db.createUser({user: "my_user",pwd: "password",roles: [ { role: "readWrite", db: "my_data" } ]});
+    ```
 
 #### Resources
 - https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/
