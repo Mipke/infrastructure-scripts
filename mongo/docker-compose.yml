@@ -11,7 +11,7 @@ networks:
 
 secrets:
   mongo-replica-keys:
-    file: ./mongo-replica-keys.yml
+    file: ./mongo_replica_keys.yml
 
 services:
   mongo1:
