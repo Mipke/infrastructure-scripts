@@ -25,7 +25,7 @@ services:
     secrets:
       - source: mongo-replica-keys
         mode: 0999
-    command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
+    command: 'bash -c "chown 999:999 /run/secrets/mongo-replica-keys && mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0"'
     deploy:
       placement:
         constraints:
@@ -41,7 +41,7 @@ services:
     secrets:
       - source: mongo-replica-keys
         mode: 0999
-    command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
+    command: 'bash -c "chown 999:999 /run/secrets/mongo-replica-keys && mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0"'
     deploy:
       placement:
         constraints:
@@ -57,7 +57,7 @@ services:
     secrets:
       - source: mongo-replica-keys
         mode: 0999
-    command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
+    command: 'bash -c "chown 999:999 /run/secrets/mongo-replica-keys && mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0"'
     deploy:
       placement:
         constraints:
