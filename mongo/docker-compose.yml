@@ -24,7 +24,7 @@ services:
       - 27017:27017
     secrets:
       - source: mongo-replica-keys
-        mode: 0400
+        mode: 0600
     command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
     deploy:
       placement:
@@ -40,7 +40,7 @@ services:
       - 27018:27017
     secrets:
       - source: mongo-replica-keys
-        mode: 0400
+        mode: 0600
     command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
     deploy:
       placement:
@@ -56,7 +56,7 @@ services:
       - 27019:27017
     secrets:
       - source: mongo-replica-keys
-        mode: 0400
+        mode: 0600
     command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
     deploy:
       placement:
