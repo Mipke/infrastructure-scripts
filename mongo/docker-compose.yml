@@ -24,8 +24,8 @@ services:
       - 27017:27017
     secrets:
       - source: mongo-replica-keys
-        mode: 0600
-    command: 'chown 999:999 /run/secrets/mongo-replica-keys && mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
+        mode: 0999
+    command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
     deploy:
       placement:
         constraints:
@@ -40,8 +40,8 @@ services:
       - 27018:27017
     secrets:
       - source: mongo-replica-keys
-        mode: 0600
-    command: 'chown 999:999 /run/secrets/mongo-replica-keys && mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
+        mode: 0999
+    command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
     deploy:
       placement:
         constraints:
@@ -56,8 +56,8 @@ services:
       - 27019:27017
     secrets:
       - source: mongo-replica-keys
-        mode: 0600
-    command: 'chown 999:999 /run/secrets/mongo-replica-keys && mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
+        mode: 0999
+    command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0'
     deploy:
       placement:
         constraints:
