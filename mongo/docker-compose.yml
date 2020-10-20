@@ -17,7 +17,6 @@ services:
   mongo1:
     image: mongo:4.4.1
     volumes:
-      - mongo-keys:/opt/keyfile
       - /mnt/volume_nyc3_01:/data/db
     env_file:
       ./mongod.env
@@ -33,7 +32,6 @@ services:
   mongo2:
     image: mongo:4.4.1
     volumes:
-      - mongo-keys:/opt/keyfile
       - mongodata2:/data/db
     env_file:
       ./mongod.env
@@ -49,7 +47,6 @@ services:
   mongo3:
     image: mongo:4.4.1
     volumes:
-      - mongo-keys:/opt/keyfile
       - mongodata3:/data/db
     env_file:
       ./mongod.env
