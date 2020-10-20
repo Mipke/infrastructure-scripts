@@ -23,7 +23,8 @@ services:
     ports:
       - 27017:27017
     secrets:
-      - mongo_key
+      - source: mongo_key
+        mode: 0400
     command: 'mongod --auth --keyFile /run/secrets/mongo_key --replSet rs0'
     deploy:
       placement:
@@ -38,7 +39,8 @@ services:
     ports:
       - 27018:27017
     secrets:
-      - mongo_key
+      - source: mongo_key
+        mode: 0400
     command: 'mongod --auth --keyFile /run/secrets/mongo_key --replSet rs0'
     deploy:
       placement:
@@ -53,7 +55,8 @@ services:
     ports:
       - 27019:27017
     secrets:
-      - mongo_key
+      - source: mongo_key
+        mode: 0400
     command: 'mongod --auth --keyFile /run/secrets/mongo_key --replSet rs0'
     deploy:
       placement:
