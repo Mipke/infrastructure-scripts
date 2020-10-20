@@ -10,8 +10,8 @@ networks:
       name: mongo
 
 secrets:
-  mongo_key:
-    external: true
+  mongo-replica-keys:
+    file: ./mongo-replica-keys.yml
 
 services:
   mongo1:
@@ -23,10 +23,10 @@ services:
     ports:
       - 27017:27017
     secrets:
-      - source: mongo_key
-        target: mongo_key.yml
+      - source: mongo-replica-keys
+        target: mongo-replica-keys.yml
         mode: 0400
-    command: 'mongod --auth --keyFile /run/secrets/mongo_key.yml --replSet rs0'
+    command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys.yml --replSet rs0'
     deploy:
       placement:
         constraints:
@@ -40,10 +40,10 @@ services:
     ports:
       - 27018:27017
     secrets:
-      - source: mongo_key
-        target: mongo_key.yml
+      - source: mongo-replica-keys
+        target: mongo-replica-keys.yml
         mode: 0400
-    command: 'mongod --auth --keyFile /run/secrets/mongo_key.yml --replSet rs0'
+    command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys.yml --replSet rs0'
     deploy:
       placement:
         constraints:
@@ -57,10 +57,10 @@ services:
     ports:
       - 27019:27017
     secrets:
-      - source: mongo_key
-        target: mongo_key.yml
+      - source: mongo-replica-keys
+        target: mongo-replica-keys.yml
         mode: 0400
-    command: 'mongod --auth --keyFile /run/secrets/mongo_key.yml --replSet rs0'
+    command: 'mongod --auth --keyFile /run/secrets/mongo-replica-keys.yml --replSet rs0'
     deploy:
       placement:
         constraints:
