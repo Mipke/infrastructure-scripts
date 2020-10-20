@@ -1,4 +1,4 @@
-version: "3.1"
+version: "3.8"
 
 volumes:
   mongodata2:
@@ -9,23 +9,17 @@ networks:
     external:
       name: mongo
 
-secrets:
-  mongo-replica-keys:
-    file: ./mongo_replica_keys.yml
-
 services:
   mongo1:
     image: mongo:4.4.1
     volumes:
+      - ~/mongo-conf:/mongo-conf
       - /mnt/volume_nyc3_01:/data/db
     env_file:
       ./mongod.env
     ports:
       - 27017:27017
-    secrets:
-      - source: mongo-replica-keys
-        mode: 0999
-    command: 'bash -c "chown 999:999 /run/secrets/mongo-replica-keys && mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0"'
+    command: 'mongod --auth --keyFile /mongo-conf/mongo_replica_keys.yml --replSet rs0'
     deploy:
       placement:
         constraints:
@@ -33,15 +27,13 @@ services:
   mongo2:
     image: mongo:4.4.1
     volumes:
+      - ~/mongo-conf:/mongo-conf
       - mongodata2:/data/db
     env_file:
       ./mongod.env
     ports:
       - 27018:27017
-    secrets:
-      - source: mongo-replica-keys
-        mode: 0999
-    command: 'bash -c "chown 999:999 /run/secrets/mongo-replica-keys && mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0"'
+    command: 'mongod --auth --keyFile /mongo-conf/mongo_replica_keys.yml --replSet rs0'
     deploy:
       placement:
         constraints:
@@ -49,15 +41,13 @@ services:
   mongo3:
     image: mongo:4.4.1
     volumes:
+      - ~/mongo-conf:/mongo-conf
       - mongodata3:/data/db
     env_file:
       ./mongod.env
     ports:
       - 27019:27017
-    secrets:
-      - source: mongo-replica-keys
-        mode: 0999
-    command: 'bash -c "chown 999:999 /run/secrets/mongo-replica-keys && mongod --auth --keyFile /run/secrets/mongo-replica-keys --replSet rs0"'
+    command: 'mongod --auth --keyFile /mongo-conf/mongo_replica_keys.yml --replSet rs0'
     deploy:
       placement:
         constraints:
