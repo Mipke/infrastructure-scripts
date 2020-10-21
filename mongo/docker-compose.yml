@@ -19,7 +19,7 @@ services:
       ./mongod.env
     ports:
       - 27017:27017
-    command: 'mongod --auth --keyFile /mongo-conf/mongo_replica_keys.yml --replSet rs0'
+    command: 'mongod --auth --keyFile /mongo-conf/mongo_replica_keys.yml --replSet rs0 --bind_ip mongo1'
     deploy:
       placement:
         constraints:
@@ -33,7 +33,7 @@ services:
       ./mongod.env
     ports:
       - 27018:27017
-    command: 'mongod --auth --keyFile /mongo-conf/mongo_replica_keys.yml --replSet rs0'
+    command: 'mongod --auth --keyFile /mongo-conf/mongo_replica_keys.yml --replSet rs0 --bind_ip mongo2'
     deploy:
       placement:
         constraints:
@@ -47,7 +47,7 @@ services:
       ./mongod.env
     ports:
       - 27019:27017
-    command: 'mongod --auth --keyFile /mongo-conf/mongo_replica_keys.yml --replSet rs0'
+    command: 'mongod --auth --keyFile /mongo-conf/mongo_replica_keys.yml --replSet rs0 --bind_ip mongo3'
     deploy:
       placement:
         constraints:
