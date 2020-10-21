@@ -20,9 +20,9 @@ us to pin each running instance of mongo to a particular node. The name of each 
 of the corresponding node found in the output of `docker node ls`:
 
     ```
-   docker node update --label-add mongo.replica=1 $(docker node ls -q -f name=manager1)
-   docker node update --label-add mongo.replica=2 $(docker node ls -q -f name=worker1)
-   docker node update --label-add mongo.replica=3 $(docker node ls -q -f name=worker2)
+   docker node update --label-add mongo.replica=1 mongo1
+   docker node update --label-add mongo.replica=2 mongo2
+   docker node update --label-add mongo.replica=3 mongo3
    ... so on and so forth
     ```
 
@@ -74,15 +74,15 @@ of the nodes in the swarm:
           "members":[
              {
                 "_id":0,
-                "host":"mongo1:27017"
+                "host":"<MONGO1 HOST>:27017"
              },
              {
                 "_id":1,
-                "host":"mongo2:27017"
+                "host":"<MONGO2 HOST>:27018"
              },
              {
                 "_id":2,
-                "host":"mongo3:27017"
+                "host":"<MONGO3 HOST>:27019"
              }
           ]
        }
@@ -111,6 +111,15 @@ step):
     use my_data;
     db.createUser({user: "my_user",pwd: "password",roles: [ { role: "readWrite", db: "my_data" } ]});
     ```
+    
+13. Now you should be able to connect to the replica set from a mongo shell with a URI like this:
+
+    `mongodb://my_user:password@<MONGO1 HOST>:27017,<MONGO2 HOST>:27018,<MONGO3 HOST>:27019/my_data?replicaSet=rs0`
+    
+14. Optionally, you can loop back and make the worker swarm nodes managers as well to increase the resiliency of
+the replica set:
+
+    `docker node promote <NODE NAME>` or `docker node update --role manager <NODE NAME>`
 
 #### Resources
 - https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/
