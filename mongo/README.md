@@ -60,7 +60,7 @@ of the nodes in the swarm:
 
     `docker stack deploy --compose-file docker-compose.yml mongo-stack`
     
-8. Initiate the replica set from a mongo shell:
+8. Initiate the replica set from a mongo shell, prioritizing mongo1:
 
     ```
    mongosh "mongodb://<ROOT USER>:<ROOT PASSWORD>@<MONGO1 HOST>:27017/?replSet=rs0"
@@ -70,7 +70,8 @@ of the nodes in the swarm:
           "members":[
              {
                 "_id":0,
-                "host":"<MONGO1 HOST>:27017"
+                "host":"<MONGO1 HOST>:27017",
+                "priority": 2
              },
              {
                 "_id":1,
@@ -84,35 +85,26 @@ of the nodes in the swarm:
        }
    );
    ```
-
-9. Prioritize the first node to have priority as the primary mongo node (from the same mongo shell as the last
-step):
-
-    ```
-    conf = rs.config();
-    conf.members[0].priority = 2;
-    rs.reconfig(conf);
-    ```
     
-10. In the mongo shell, now create an additional user to act as the cluster admin:
+9. In the mongo shell, now create an additional user to act as the cluster admin:
 
     ```
     use admin;
     db.createUser({user: "cluster_admin",pwd: "password",roles: [ { role: "userAdminAnyDatabase", db: "admin" },  { "role" : "clusterAdmin", "db" : "admin" } ]});
     ```
     
-11. In the mongo shell, authenticate as the new cluster admin and create a user for the desired app database:
+10. In the mongo shell, authenticate as the new cluster admin and create a user for the desired app database:
 
     ```
     use my_data;
     db.createUser({user: "my_user",pwd: "password",roles: [ { role: "readWrite", db: "my_data" } ]});
     ```
     
-12. Now you should be able to connect to the replica set from a mongo shell with a URI like this:
+11. Now you should be able to connect to the replica set from a mongo shell with a URI like this:
 
     `mongodb://my_user:password@<MONGO1 HOST>:27017,<MONGO2 HOST>:27018,<MONGO3 HOST>:27019/my_data?replicaSet=rs0`
     
-13. Optionally, you can loop back and make the worker swarm nodes managers as well to increase the resiliency of
+12. Optionally, you can loop back and make the worker swarm nodes managers as well to increase the resiliency of
 the replica set:
 
     `docker node promote <NODE NAME>` or `docker node update --role manager <NODE NAME>`
