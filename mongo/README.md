@@ -25,17 +25,13 @@ of the corresponding node found in the output of `docker node ls`:
    docker node update --label-add mongo.replica=3 mongo3
    ... so on and so forth
     ```
-
-5. Create a network overlay for the replicas to communicate with each other:
-
-    `docker network create --driver overlay --internal mongo`
     
-6. Be sure to set the root user password inside of `mongod.env`
+5. Be sure to set the root user password inside of `mongod.env`
 (This file can be deleted once the service starts on the swarm):
 
     `nano mongodb.env`
     
-7. Next it is necessary to create a key to encrypt communication between the replicas and to put this key on each 
+6. Next it is necessary to create a key to encrypt communication between the replicas and to put this key on each 
 of the nodes in the swarm:
 
     ```
@@ -59,12 +55,12 @@ of the nodes in the swarm:
    Create the same directory and file on each of the other nodes. Copy/paste the contents of the first node's 
    file contents so that all nodes have the same set of keys. Be sure to also permission each node's file.
     
-8. Next ensure the details within `docker-compose.yml` are accurate. (Paths to attached
+7. Next ensure the details within `docker-compose.yml` are accurate. (Paths to attached
  volumes and such) Then deploy the replica set by running:
 
     `docker stack deploy --compose-file docker-compose.yml mongo-stack`
     
-9. Initiate the replica set from a mongo shell:
+8. Initiate the replica set from a mongo shell:
 
     ```
    mongosh "mongodb://<ROOT USER>:<ROOT PASSWORD>@<MONGO1 HOST>:27017/?replSet=rs0"
@@ -89,7 +85,7 @@ of the nodes in the swarm:
    );
    ```
 
-10. Prioritize the first node to have priority as the primary mongo node (from the same mongo shell as the last
+9. Prioritize the first node to have priority as the primary mongo node (from the same mongo shell as the last
 step):
 
     ```
@@ -98,25 +94,25 @@ step):
     rs.reconfig(conf);
     ```
     
-11. In the mongo shell, now create an additional user to act as the cluster admin:
+10. In the mongo shell, now create an additional user to act as the cluster admin:
 
     ```
     use admin;
     db.createUser({user: "cluster_admin",pwd: "password",roles: [ { role: "userAdminAnyDatabase", db: "admin" },  { "role" : "clusterAdmin", "db" : "admin" } ]});
     ```
     
-12. In the mongo shell, authenticate as the new cluster admin and create a user for the desired app database:
+11. In the mongo shell, authenticate as the new cluster admin and create a user for the desired app database:
 
     ```
     use my_data;
     db.createUser({user: "my_user",pwd: "password",roles: [ { role: "readWrite", db: "my_data" } ]});
     ```
     
-13. Now you should be able to connect to the replica set from a mongo shell with a URI like this:
+12. Now you should be able to connect to the replica set from a mongo shell with a URI like this:
 
     `mongodb://my_user:password@<MONGO1 HOST>:27017,<MONGO2 HOST>:27018,<MONGO3 HOST>:27019/my_data?replicaSet=rs0`
     
-14. Optionally, you can loop back and make the worker swarm nodes managers as well to increase the resiliency of
+13. Optionally, you can loop back and make the worker swarm nodes managers as well to increase the resiliency of
 the replica set:
 
     `docker node promote <NODE NAME>` or `docker node update --role manager <NODE NAME>`
